@@ -2,8 +2,9 @@ body {
 	background-color : red;
 }
 
-#box {
-	height : 200;
-	width : 200;
+.box {
+	position : absolute;
+	height : 200px;
+	width : 200px;
 	background-color : blue;
 }
