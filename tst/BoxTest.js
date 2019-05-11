@@ -1,8 +1,8 @@
 'use strict';
 
 const assert = require('assert');
-const Box = require('../src/Box.js');
-const Point = require('../src/Point.js');
+const Box = require('../src/box.js');
+const Point = require('../src/point.js');
 
 function testConstructorInvalidParameters() {
 
