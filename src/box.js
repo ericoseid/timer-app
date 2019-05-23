@@ -1,20 +1,33 @@
 'use strict';
 
-export default class Box {
-	constructor(upperLeft, uniqueKey) {
-		this.validateConstructorParam(upperLeft, "upperLeft is null");
-		this.validateConstructorParam(uniqueKey, "uniqueKey is null");
+import React from 'react';
 
-		this.upperLeft = upperLeft;
-		this.uniqueKey = uniqueKey;
+export default class Box extends React.Component {
+	constructor(props) {
+		super(props);	
 
-		Object.freeze(this);		
+		this.createProperties = this.createProperties.bind(this);
 	}
 
-	validateConstructorParam(param, message) {
-		if (param === null || param === undefined) {
-			throw new TypeError(message);
-		}
+	createProperties() {
+		let upperLeft = this.props.data.upperLeft;
+
+		return (
+			{className : 'box',
+			key : this.props.data.uniqueKey,
+			style : {top : upperLeft.y,
+							left : upperLeft.x
+							}
+			}
+		);	
+	}
+
+	render() {
+		return (
+			React.createElement('div', 
+												  this.createProperties(), 
+													null)
+		);	
 	}
 }
 

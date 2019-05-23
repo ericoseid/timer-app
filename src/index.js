@@ -1,20 +1,22 @@
 import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import BoxCarouselData from './box-carousel-data';
+import BoxCarousel from './box-carousel';
 import './style.css';
-import BoxComponent from './box-component';
-import Point from './point';
-import Box from './box';
 
 const div = document.createElement('div');
 div.id = 'root';
 document.body.append(div);
 
-let p = new Point(10, 10);
-let b = new Box(p, 1);
+let d = new BoxCarouselData();
+d.addBox();
+d.addBox();
+d.addBox();
 
 ReactDOM.render(
-	React.createElement(BoxComponent, {data : b}, null),
+	React.createElement(BoxCarousel, {data : d}, null),
 	document.getElementById('root')
 );
+
 
