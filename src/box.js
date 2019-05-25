@@ -14,6 +14,8 @@ export default class Box extends React.Component {
 
 		return (
 			{className : 'box',
+			onMouseDown : this.props.onMouseDown,
+			onMouseUp : this.props.onMouseUp,
 			key : this.props.data.uniqueKey,
 			style : {top : upperLeft.y,
 							left : upperLeft.x

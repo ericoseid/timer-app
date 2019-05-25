@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Page from './timer-page';
+import BoxCarousel from './box-carousel';
 import './style.css';
 
 const div = document.createElement('div');
@@ -9,7 +9,7 @@ div.id = 'root';
 document.body.append(div);
 
 ReactDOM.render(
-	React.createElement(Page, null, null),
+	React.createElement(BoxCarousel, null, null),
 	document.getElementById('root')
 );
 
