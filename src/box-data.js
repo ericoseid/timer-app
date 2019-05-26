@@ -7,8 +7,6 @@ export default class BoxData {
 
 		this.upperLeft = upperLeft;
 		this.uniqueKey = uniqueKey;
-
-		Object.freeze(this);		
 	}
 
 	validateConstructorParam(param, message) {

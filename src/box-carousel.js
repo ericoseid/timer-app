@@ -3,6 +3,7 @@
 import React from 'react';
 import BoxCarouselData from './box-carousel-data.js';
 import Box from './box';
+import Point from './point';
 
 export default class BoxCarousel extends React.Component {
 	constructor(props) {
@@ -11,7 +12,8 @@ export default class BoxCarousel extends React.Component {
 		let carouselData = new BoxCarouselData();
 		carouselData.addBox();
 
-		let dragged = undefined;
+		let draggedBoxIndex = undefined;
+		let draggedBoxOrigPosition;
 
 		this.state = {
 			carouselData : carouselData,
@@ -19,8 +21,9 @@ export default class BoxCarousel extends React.Component {
 
 		this.addBox = this.addBox.bind(this);
 		this.onMouseDown = this.onMouseDown.bind(this);
-		this.onMouseUp = this.onMouseUp.bind(this);
-		this.onDrag = this.onDrag.bind(this);
+		this.onMouseUpOrLeave = this.onMouseUpOrLeave.bind(this);
+		this.onMouseMove = this.onMouseMove.bind(this);
+		this.createBoxProperties = this.createBoxProperties.bind(this);
 	}
 
 	addBox() {
@@ -32,20 +35,56 @@ export default class BoxCarousel extends React.Component {
 	}
 
 	onMouseDown(index) {
-		dragged = this.state.carouselData.boxes[index];
+		this.draggedBoxOrigPosition = 
+			this.state.carouselData.boxes[index].upperLeft;
+
+		this.draggedBoxIndex = index;
 	}
 
-	onMouseUp() {
-		dragged = undefined;
+	onMouseUpOrLeave() {
+		if (this.draggedBoxIndex != undefined) {
+			let draggedBox = this.state.carouselData.boxes[this.draggedBoxIndex];
+		
+			draggedBox.upperLeft = this.draggedBoxOrigPosition;
+
+			this.draggedBoxIndex = undefined;
+
+			this.setState({
+				carouselData : this.state.carouselData,
+			});
+		}
 	}
 
-	onDrag() {
+	onMouseMove(event) {
+		if (this.draggedBoxIndex != undefined) {
+			let draggedBox = this.state.carouselData.boxes[this.draggedBoxIndex];
 
+			let newX = draggedBox.upperLeft.x + event.movementX;
+			let newY = draggedBox.upperLeft.y + event.movementY;
+
+			draggedBox.upperLeft = new Point(newX, newY);
+
+			this.setState({
+				carouselData : this.state.carouselData,
+			});
+		}
 	}
+	
+	createBoxProperties(box, index) {
+		return (
+			{data : box, 
+		 	 onMouseDown : (event) => this.onMouseDown(index), 
+			 onMouseUpOrLeave : this.onMouseUpOrLeave,
+			 onMouseMove : (event) => this.onMouseMove(event),
+			}
+		);
+	}	
 
 	render() {
 		let boxes = this.state.carouselData.boxes.map((box, index) => 
-									React.createElement(Box, {data : box, onMouseDown : (event) => this.onMouseDown(index), onMouseUp : this.onMouseUp}, null)
+									React.createElement(Box, 
+																			this.createBoxProperties(box, index), 
+																			null)
 								);
 
 		return  (
