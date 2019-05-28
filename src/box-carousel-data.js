@@ -18,4 +18,21 @@ export default class BoxCarouselData {
 		this.nextUniqueKey = this.nextUniqueKey + 1;
     this.nextUpperLeftX = 10 + (220 * this.nextUniqueKey);
 	}
+
+	moveBox(index, newUpperLeft) {
+		let movedBox = this.boxes[index];
+
+		movedBox.upperLeft = newUpperLeft;
+	}
+
+	moveBoxFromEvent(index, event) {
+		let movedBox = this.boxes[index];
+
+		let newX = movedBox.upperLeft.x + event.movementX;
+		let newY = movedBox.upperLeft.y + event.movementY;
+
+		let newUpperLeft = new Point(newX, newY);
+
+		movedBox.upperLeft = newUpperLeft;
+	}
 }

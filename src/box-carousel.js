@@ -29,9 +29,7 @@ export default class BoxCarousel extends React.Component {
 	addBox() {
 		this.state.carouselData.addBox();
 
-		this.setState({
-			carouselData : this.state.carouselData,
-		});
+		this.resetState();
 	}
 
 	onMouseDown(index) {
@@ -43,30 +41,19 @@ export default class BoxCarousel extends React.Component {
 
 	onMouseUpOrLeave() {
 		if (this.draggedBoxIndex != undefined) {
-			let draggedBox = this.state.carouselData.boxes[this.draggedBoxIndex];
-		
-			draggedBox.upperLeft = this.draggedBoxOrigPosition;
+			this.state.carouselData.moveBox(this.draggedBoxIndex, this.draggedBoxOrigPosition);
 
 			this.draggedBoxIndex = undefined;
 
-			this.setState({
-				carouselData : this.state.carouselData,
-			});
+			this.resetState();
 		}
 	}
 
 	onMouseMove(event) {
 		if (this.draggedBoxIndex != undefined) {
-			let draggedBox = this.state.carouselData.boxes[this.draggedBoxIndex];
+			this.state.carouselData.moveBoxFromEvent(this.draggedBoxIndex, event);
 
-			let newX = draggedBox.upperLeft.x + event.movementX;
-			let newY = draggedBox.upperLeft.y + event.movementY;
-
-			draggedBox.upperLeft = new Point(newX, newY);
-
-			this.setState({
-				carouselData : this.state.carouselData,
-			});
+			this.resetState();
 		}
 	}
 	
@@ -79,6 +66,12 @@ export default class BoxCarousel extends React.Component {
 			}
 		);
 	}	
+
+	resetState() {
+		this.setState({
+			carouselData : this.state.carouselData,
+		});
+	}
 
 	render() {
 		let boxes = this.state.carouselData.boxes.map((box, index) => 
