@@ -14,5 +14,14 @@ export default class BoxData {
 			throw new TypeError(message);
 		}
 	}
+
+	isPointInside(point) {
+		if ((point.x > this.upperLeft.x && point.x < this.upperLeft.x + 200)
+				&& (point.y > this.upperLeft.y && point.y < this.upperLeft.y + 200)) {
+			return true;
+		}
+
+		return false;
+	}
 }
 
