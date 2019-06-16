@@ -11,6 +11,7 @@ export default class Box extends React.Component {
 
 	createProperties() {
 		let upperLeft = this.props.data.upperLeft;
+		let zIndex = this.props.data.zIndex;
 
 		return (
 			{className : 'box',
@@ -20,7 +21,8 @@ export default class Box extends React.Component {
 			onMouseMove : this.props.onMouseMove,
 			key : this.props.data.uniqueKey,
 			style : {top : upperLeft.y,
-							left : upperLeft.x
+							left : upperLeft.x,
+							zIndex : zIndex,
 							}
 			}
 		);	
@@ -30,7 +32,7 @@ export default class Box extends React.Component {
 		return (
 			React.createElement('div', 
 												  this.createProperties(), 
-													null)
+													React.createElement('p', {style : {fontSize : 100}}, this.props.data.uniqueKey))
 		);	
 	}
 }

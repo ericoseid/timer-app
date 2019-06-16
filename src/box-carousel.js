@@ -11,9 +11,11 @@ export default class BoxCarousel extends React.Component {
 
 		let carouselData = new BoxCarouselData();
 		carouselData.addBox();
+		carouselData.addBox();
 
 		let draggedBoxIndex = undefined;
 		let draggedBoxOrigPosition;
+		let hoveredBoxIndex = undefined;
 
 		this.state = {
 			carouselData : carouselData,
@@ -23,6 +25,7 @@ export default class BoxCarousel extends React.Component {
 		this.onMouseDown = this.onMouseDown.bind(this);
 		this.onMouseUpOrLeave = this.onMouseUpOrLeave.bind(this);
 		this.onMouseMove = this.onMouseMove.bind(this);
+		this.getHoveredBoxIndex = this.getHoveredBoxIndex.bind(this);
 		this.createBoxProperties = this.createBoxProperties.bind(this);
 	}
 
@@ -33,6 +36,8 @@ export default class BoxCarousel extends React.Component {
 	}
 
 	onMouseDown(index) {
+		this.state.carouselData.boxes[index].zIndex = 1;
+
 		this.draggedBoxOrigPosition = 
 			this.state.carouselData.boxes[index].upperLeft;
 
@@ -41,9 +46,18 @@ export default class BoxCarousel extends React.Component {
 
 	onMouseUpOrLeave() {
 		if (this.draggedBoxIndex != undefined) {
-			this.state.carouselData.moveBox(this.draggedBoxIndex, this.draggedBoxOrigPosition);
+			if (this.hoveredBoxIndex != undefined) {
+				let hoveredBox = this.state.carouselData.boxes[this.hoveredBoxIndex];
 
+				this.state.carouselData.moveBox(this.draggedBoxIndex, hoveredBox.upperLeft);
+				this.state.carouselData.moveBox(this.hoveredBoxIndex, this.draggedBoxOrigPosition);
+			} else {
+				this.state.carouselData.moveBox(this.draggedBoxIndex, this.draggedBoxOrigPosition);
+			}
+
+			this.state.carouselData.boxes[this.draggedBoxIndex].zIndex = 0;
 			this.draggedBoxIndex = undefined;
+			this.hoveredBox = undefined;
 
 			this.resetState();
 		}
@@ -53,10 +67,25 @@ export default class BoxCarousel extends React.Component {
 		if (this.draggedBoxIndex != undefined) {
 			this.state.carouselData.moveBoxFromEvent(this.draggedBoxIndex, event);
 
+			this.hoveredBox = this.getHoveredBoxIndex(event);		
+
 			this.resetState();
 		}
 	}
 	
+	getHoveredBoxIndex(event) {
+		let currentMousePosition = new Point(event.clientX, event.clientY);
+
+		for (let i = 0; i < this.state.carouselData.boxes.length; i++) {
+			if (i != this.draggedBoxIndex && 
+					this.state.carouselData.boxes[i].isPointInside(currentMousePosition)) {
+				return i;
+			}
+		}
+		
+		return undefined;
+	}
+
 	createBoxProperties(box, index) {
 		return (
 			{data : box, 
