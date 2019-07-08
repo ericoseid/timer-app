@@ -6,6 +6,7 @@ export default class Box extends React.Component {
 	constructor(props) {
 		super(props);	
 
+		let visible = true;
 		this.createProperties = this.createProperties.bind(this);
 	}
 
@@ -29,11 +30,15 @@ export default class Box extends React.Component {
 	}
 
 	render() {
-		return (
-			React.createElement('div', 
-												  this.createProperties(), 
-													React.createElement('p', {style : {fontSize : 100}}, this.props.data.uniqueKey))
-		);	
+		if (this.props.data.visible) {
+			return (
+				React.createElement('div', 
+		  										  this.createProperties(), 
+		  											React.createElement('p', {style : {fontSize : 100}}, this.props.data.uniqueKey))
+			);	
+		}
+
+		return null;
 	}
 }
 

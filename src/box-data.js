@@ -8,6 +8,7 @@ export default class BoxData {
 		this.upperLeft = upperLeft;
 		this.uniqueKey = uniqueKey;
 		this.zIndex = -1;
+		this.visible = true;
 	}
 
 	validateConstructorParam(param, message) {

@@ -28,6 +28,7 @@ export default class BoxCarousel extends React.Component {
 		this.onMouseMove = this.onMouseMove.bind(this);
 		this.getHoveredBoxIndex = this.getHoveredBoxIndex.bind(this);
 		this.createBoxProperties = this.createBoxProperties.bind(this);
+		this.updateHoveredBox = this.updateHoveredBox.bind(this);
 	}
 
 	addBox() {
@@ -49,6 +50,7 @@ export default class BoxCarousel extends React.Component {
 		if (this.draggedBoxIndex != undefined) {
 			if (this.hoveredBoxIndex != undefined) {
 				let hoveredBox = this.state.carouselData.boxes[this.hoveredBoxIndex];
+				hoveredBox.visible = true;
 
 				this.state.carouselData.moveBox(this.draggedBoxIndex, hoveredBox.upperLeft);
 				this.state.carouselData.moveBox(this.hoveredBoxIndex, this.draggedBoxOrigPosition);
@@ -67,13 +69,26 @@ export default class BoxCarousel extends React.Component {
 	onMouseMove(event) {
 		if (this.draggedBoxIndex != undefined) {
 			this.state.carouselData.moveBoxFromEvent(this.draggedBoxIndex, event);
-
-			this.hoveredBoxIndex = this.getHoveredBoxIndex(event);
+			
+			this.updateHoveredBox(event);
 					
 			this.resetState();
 		}
 	}
 	
+	updateHoveredBox(event) {
+			let newHoveredBoxIndex = this.getHoveredBoxIndex(event);
+			if (this.hoveredBoxIndex != undefined &&
+					newHoveredBoxIndex != this.hoveredBoxIndex) {
+				this.state.carouselData.boxes[this.hoveredBoxIndex].visible = true;
+			}
+	
+			this.hoveredBoxIndex = newHoveredBoxIndex;
+			if (this.hoveredBoxIndex != undefined) {
+				this.state.carouselData.boxes[this.hoveredBoxIndex].visible = false;
+			}			
+	}
+
 	getHoveredBoxIndex(event) {
 		let currentMousePosition = new Point(event.clientX, event.clientY);
 
