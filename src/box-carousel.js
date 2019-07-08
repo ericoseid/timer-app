@@ -16,6 +16,7 @@ export default class BoxCarousel extends React.Component {
 		let draggedBoxIndex = undefined;
 		let draggedBoxOrigPosition;
 		let hoveredBoxIndex = undefined;
+		let hoveredBoxOrigPosition;
 
 		this.state = {
 			carouselData : carouselData,
@@ -67,8 +68,8 @@ export default class BoxCarousel extends React.Component {
 		if (this.draggedBoxIndex != undefined) {
 			this.state.carouselData.moveBoxFromEvent(this.draggedBoxIndex, event);
 
-			this.hoveredBox = this.getHoveredBoxIndex(event);		
-
+			this.hoveredBoxIndex = this.getHoveredBoxIndex(event);
+					
 			this.resetState();
 		}
 	}
