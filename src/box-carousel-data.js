@@ -7,6 +7,7 @@ export default class BoxCarouselData {
 	constructor() {
 		this.boxes = [];
 
+		this.shadowBoxIndex;
 		this.nextUniqueKey = 0;
 		this.nextUpperLeftX = 10;
 	}
@@ -17,6 +18,19 @@ export default class BoxCarouselData {
 
 		this.nextUniqueKey = this.nextUniqueKey + 1;
     this.nextUpperLeftX = 10 + (220 * this.nextUniqueKey);
+	}
+
+	addShadowBox(position) {
+		console.log("add shadow box");
+		this.boxes.push(new BoxData(position, -1));
+
+		this.shadowBoxIndex = this.boxes.length - 1;
+	}
+
+	removeShadowBox() {
+		console.log(this.boxes);
+		this.boxes.splice(this.shadowBoxIndex, 1);
+		console.log(this.boxes);
 	}
 
 	moveBox(index, newUpperLeft) {

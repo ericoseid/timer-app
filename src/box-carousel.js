@@ -29,6 +29,8 @@ export default class BoxCarousel extends React.Component {
 		this.getHoveredBoxIndex = this.getHoveredBoxIndex.bind(this);
 		this.createBoxProperties = this.createBoxProperties.bind(this);
 		this.updateHoveredBox = this.updateHoveredBox.bind(this);
+		this.setNewHoveredBox = this.setNewHoveredBox.bind(this);
+		this.unsetHoveredBox = this.unsetHoveredBox.bind(this);
 	}
 
 	addBox() {
@@ -52,6 +54,7 @@ export default class BoxCarousel extends React.Component {
 				let hoveredBox = this.state.carouselData.boxes[this.hoveredBoxIndex];
 				hoveredBox.visible = true;
 
+				this.state.carouselData.removeShadowBox();
 				this.state.carouselData.moveBox(this.draggedBoxIndex, hoveredBox.upperLeft);
 				this.state.carouselData.moveBox(this.hoveredBoxIndex, this.draggedBoxOrigPosition);
 			} else {
@@ -74,19 +77,34 @@ export default class BoxCarousel extends React.Component {
 					
 			this.resetState();
 		}
-	}
-	
+	} 
+
 	updateHoveredBox(event) {
 			let newHoveredBoxIndex = this.getHoveredBoxIndex(event);
 			if (this.hoveredBoxIndex != undefined &&
 					newHoveredBoxIndex != this.hoveredBoxIndex) {
-				this.state.carouselData.boxes[this.hoveredBoxIndex].visible = true;
+				this.unsetHoveredBox(this.hoveredBoxIndex);
 			}
-	
+
+			if(newHoveredBoxIndex != undefined &&
+				 newHoveredBoxIndex != this.hoveredBoxIndex) {
+				this.setNewHoveredBox(newHoveredBoxIndex);	
+			} 
+			
 			this.hoveredBoxIndex = newHoveredBoxIndex;
-			if (this.hoveredBoxIndex != undefined) {
-				this.state.carouselData.boxes[this.hoveredBoxIndex].visible = false;
-			}			
+	}
+
+	setNewHoveredBox(index) {
+			this.state.carouselData.boxes[index].visible = false;
+
+			console.log(this.draggedBoxOrigPosition);
+			this.state.carouselData.addShadowBox(this.draggedBoxOrigPosition);			
+	}
+
+	unsetHoveredBox(index) {
+			this.state.carouselData.boxes[index].visible = true;
+
+			this.state.carouselData.removeShadowBox();
 	}
 
 	getHoveredBoxIndex(event) {
