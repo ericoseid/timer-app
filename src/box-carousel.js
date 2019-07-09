@@ -63,7 +63,7 @@ export default class BoxCarousel extends React.Component {
 
 			this.state.carouselData.boxes[this.draggedBoxIndex].zIndex = 0;
 			this.draggedBoxIndex = undefined;
-			this.hoveredBox = undefined;
+			this.hoveredBoxIndex = undefined;
 
 			this.resetState();
 		}
