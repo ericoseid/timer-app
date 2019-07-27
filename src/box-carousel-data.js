@@ -13,7 +13,7 @@ export default class BoxCarouselData {
 	}
 
 	addBox() {
-		this.boxes.push(new BoxData(new Point(this.nextUpperLeftX, 10),
+		this.boxes.push(new BoxData(new Point(this.nextUpperLeftX, 250),
 																this.nextUniqueKey));
 
 		this.nextUniqueKey = this.nextUniqueKey + 1;
@@ -21,16 +21,13 @@ export default class BoxCarouselData {
 	}
 
 	addShadowBox(position) {
-		console.log("add shadow box");
 		this.boxes.push(new BoxData(position, -1));
 
 		this.shadowBoxIndex = this.boxes.length - 1;
 	}
 
 	removeShadowBox() {
-		console.log(this.boxes);
 		this.boxes.splice(this.shadowBoxIndex, 1);
-		console.log(this.boxes);
 	}
 
 	moveBox(index, newUpperLeft) {
@@ -49,4 +46,17 @@ export default class BoxCarouselData {
 
 		movedBox.upperLeft = newUpperLeft;
 	}
+
+	getHoveredBoxIndex(mouseEvent, draggedBoxIndex) {
+		let currentMousePosition = new Point(mouseEvent.clientX, mouseEvent.clientY);
+
+		for (let i = 0; i < this.boxes.length; i++) {
+      if (i != draggedBoxIndex &&  
+          this.boxes[i].isPointInside(currentMousePosition)) {
+        return i;
+      }   
+    }   
+    
+    return undefined;	
+	}	
 }

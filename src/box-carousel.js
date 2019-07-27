@@ -26,7 +26,6 @@ export default class BoxCarousel extends React.Component {
 		this.onMouseDown = this.onMouseDown.bind(this);
 		this.onMouseUpOrLeave = this.onMouseUpOrLeave.bind(this);
 		this.onMouseMove = this.onMouseMove.bind(this);
-		this.getHoveredBoxIndex = this.getHoveredBoxIndex.bind(this);
 		this.createBoxProperties = this.createBoxProperties.bind(this);
 		this.updateHoveredBox = this.updateHoveredBox.bind(this);
 		this.setNewHoveredBox = this.setNewHoveredBox.bind(this);
@@ -80,7 +79,7 @@ export default class BoxCarousel extends React.Component {
 	} 
 
 	updateHoveredBox(event) {
-			let newHoveredBoxIndex = this.getHoveredBoxIndex(event);
+			let newHoveredBoxIndex = this.state.carouselData.getHoveredBoxIndex(event, this.draggedBoxIndex);
 			if (this.hoveredBoxIndex != undefined &&
 					newHoveredBoxIndex != this.hoveredBoxIndex) {
 				this.unsetHoveredBox(this.hoveredBoxIndex);
@@ -107,19 +106,6 @@ export default class BoxCarousel extends React.Component {
 			this.state.carouselData.removeShadowBox();
 	}
 
-	getHoveredBoxIndex(event) {
-		let currentMousePosition = new Point(event.clientX, event.clientY);
-
-		for (let i = 0; i < this.state.carouselData.boxes.length; i++) {
-			if (i != this.draggedBoxIndex && 
-					this.state.carouselData.boxes[i].isPointInside(currentMousePosition)) {
-				return i;
-			}
-		}
-		
-		return undefined;
-	}
-
 	createBoxProperties(box, index) {
 		return (
 			{data : box, 
@@ -142,6 +128,8 @@ export default class BoxCarousel extends React.Component {
 																			this.createBoxProperties(box, index), 
 																			null)
 								);
+		
+		let newBox = new Box(new Point(200, 200), "hello");
 
 		return  (
 			React.createElement('div', null,
